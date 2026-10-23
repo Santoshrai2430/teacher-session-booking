@@ -1,0 +1,110 @@
+{
+  "info": {
+    "name": "Teacher Session Booking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "API test collection for the assignment. Create a teacher directly in MongoDB before creating a session."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "userId",
+      "value": "REPLACE_WITH_USER_OBJECT_ID"
+    },
+    {
+      "key": "teacherId",
+      "value": "REPLACE_WITH_TEACHER_OBJECT_ID"
+    },
+    {
+      "key": "sessionId",
+      "value": "REPLACE_WITH_SESSION_OBJECT_ID"
+    },
+    {
+      "key": "dateTimestamp",
+      "value": "1792886400000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "1 - Create User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Aarav Sharma\",\n  \"email\": \"aarav@example.com\",\n  \"phone\": \"+91-9876543210\"\n}"
+        },
+        "url": "{{http://localhost:3000}}/users"
+      }
+    },
+    {
+      "name": "2 - Create Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"teacherId\": \"{{teacherId}}\",\n  \"startTime\": \"2026-10-25T10:00:00.000Z\",\n  \"endTime\": \"2026-10-25T11:00:00.000Z\"\n}"
+        },
+        "url": "{{baseUrl}}/sessions"
+      }
+    },
+    {
+      "name": "3 - Available Sessions for Date (Aggregation)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/sessions/available?dateTimestamp={{dateTimestamp}}"
+      }
+    },
+    {
+      "name": "4 - Book Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"{{userId}}\"\n}"
+        },
+        "url": "{{baseUrl}}/sessions/{{sessionId}}/book"
+      }
+    },
+    {
+      "name": "5 - Complete Session",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/sessions/{{sessionId}}/complete"
+      }
+    },
+    {
+      "name": "6 - User Session List (Aggregation)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/users/{{userId}}/sessions"
+      }
+    }
+  ]
+}
