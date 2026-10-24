@@ -15,6 +15,13 @@ export async function createUser(req: Request, res: Response): Promise<void> {
 
 export async function getUserSessions(req: Request, res: Response): Promise<void> {
   const { id } = req.params;
+  if (typeof id !== "string" || !mongoose.Types.ObjectId.isValid(id)) {
+  res.status(400).json({
+    success: false,
+    message: "Invalid user ID",
+  });
+  return;
+}
   if (!mongoose.isValidObjectId(id)) throw new HttpError(400, 'Invalid user id');
   const userExists = await User.exists({ _id: id });
   if (!userExists) throw new HttpError(404, 'User not found');
